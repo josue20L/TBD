@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import PublicationCard from "@/components/PublicationCard";
+import Modal from "@/components/Modal";
+import GreenOfferForm from "@/components/GreenOfferForm";
 
 const DUMMY_PUBLICATIONS = [
   {
@@ -35,6 +37,7 @@ const DUMMY_PUBLICATIONS = [
 
 export default function SellerPublications() {
   const [filterStatus, setFilterStatus] = useState("all"); // all | active | sold_out
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const filtered = useMemo(() => {
     if (filterStatus === "all") return DUMMY_PUBLICATIONS;
@@ -51,7 +54,10 @@ export default function SellerPublications() {
             Gestiona las publicaciones de tus proyectos de créditos verdes.
           </p>
         </div>
-        <button className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md">
+        <button
+          className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md"
+          onClick={() => setIsCreateOpen(true)}
+        >
           + Nueva Publicación
         </button>
       </div>
@@ -112,6 +118,28 @@ export default function SellerPublications() {
           </div>
         ))}
       </div>
+
+      {/* Modal para crear una nueva publicación (formulario tipo marketplace de venta) */}
+      <Modal open={isCreateOpen} onClose={() => setIsCreateOpen(false)}>
+        <div className="space-y-4 text-sm max-h-[80vh] overflow-y-auto">
+          <div>
+            <h2 className="text-base font-semibold text-foreground">
+              Publica tu proyecto de Créditos Verdes
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Completa los detalles del proyecto para empezar a ofrecer tus créditos verdes.
+            </p>
+          </div>
+
+          <GreenOfferForm
+            onSubmit={(values) => {
+              // Por ahora solo simulamos el envío
+              console.log("Nueva publicación creada (dummy):", values);
+              setIsCreateOpen(false);
+            }}
+          />
+        </div>
+      </Modal>
     </section>
   );
 }
