@@ -1,153 +1,55 @@
 "use client";
 
-import MarketplaceLayout from "@/components/marketplace/MarketplaceLayout";
-import MyCreditsDashboard from "@/components/my-credits/MyCreditsDashboard";
-import PremiumPlans from "@/components/premium/PremiumPlans";
-import AccountAuth from "@/components/account/AccountAuth";
-import AccountProfile from "@/components/account/AccountProfile";
-import SellerPublications from "@/components/seller/SellerPublications";
-import { credits } from "@/lib/credits";
-import { useState, useMemo } from "react";
-import PublicationModal from "@/components/PublicationModal";
+import Link from "next/link";
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState("Todas las categorías");
-  const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("marketplace"); // "marketplace" | "my-credits" | "premium" | "account" | "my-publications"
-  const [selectedOffer, setSelectedOffer] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // simulación sin backend
-
-  const filteredCredits = useMemo(() => {
-    return credits.filter((credit) => {
-      const matchesSearch =
-        !search ||
-        credit.title.toLowerCase().includes(search.toLowerCase()) ||
-        credit.description.toLowerCase().includes(search.toLowerCase());
-      // Por ahora no filtramos por categoría real, solo respetamos la opción seleccionada visualmente
-      return matchesSearch;
-    });
-  }, [search]);
-
   return (
-    <main className="min-h-screen bg-background">
-      {/* Header simple */}
-      <header className="border-b border-border bg-card/80 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary" />
-            <span className="font-semibold text-lg text-foreground">GreenMarket</span>
-          </div>
+    <main className="min-h-screen bg-background flex items-center justify-center px-6">
+      <div className="max-w-3xl w-full bg-card border border-border rounded-2xl p-8 shadow-sm space-y-6 text-center">
+        <h1 className="text-2xl font-semibold text-foreground">
+          Bienvenido a <span className="text-primary">GreenMarket</span>
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Compra y vende <span className="font-semibold">Créditos Verdes</span> de proyectos
+          reales de impacto climático: reforestación, energía renovable y conservación.
+        </p>
 
-          <div className="flex items-center gap-2">
-            <button className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md">
-              Vender
-            </button>
-            <button
-              className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md"
-              onClick={() => setActiveTab("account")}
-            >
-              Iniciar Sesión
-            </button>
-            <button
-              className="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md"
-              onClick={() => setActiveTab("account")}
-            >
-              Registrarse
-            </button>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left text-xs mt-4">
+          <div className="bg-background/60 border border-border rounded-xl p-4">
+            <p className="font-semibold text-foreground mb-1">Explora el marketplace</p>
+            <p className="text-muted-foreground">
+              Descubre proyectos de créditos verdes listos para ser financiados o comercializados.
+            </p>
+          </div>
+          <div className="bg-background/60 border border-border rounded-xl p-4">
+            <p className="font-semibold text-foreground mb-1">Sigue tus créditos</p>
+            <p className="text-muted-foreground">
+              Visualiza tu balance, tus ganancias y el historial de transacciones en tiempo real.
+            </p>
+          </div>
+          <div className="bg-background/60 border border-border rounded-xl p-4">
+            <p className="font-semibold text-foreground mb-1">Vende tus proyectos</p>
+            <p className="text-muted-foreground">
+              Publica proyectos, administra su estado y destaca tus mejores ofertas.
+            </p>
           </div>
         </div>
-      </header>
 
-      {/* Tabs simples */}
-      <div className="border-b border-border bg-card/60">
-        <div className="max-w-7xl mx-auto px-6 flex items-center gap-4 text-sm">
-          <button
-            className={`py-3 font-semibold border-b-2 transition-colors ${
-              activeTab === "marketplace"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-            onClick={() => setActiveTab("marketplace")}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+          <Link
+            href="/marketplace"
+            className="px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:shadow-md"
           >
-            Marketplace
-          </button>
-          <button
-            className={`py-3 font-semibold border-b-2 transition-colors ${
-              activeTab === "my-credits"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-            onClick={() => setActiveTab("my-credits")}
+            Ir al Marketplace
+          </Link>
+          <Link
+            href="/mi-cuenta"
+            className="px-5 py-2.5 rounded-full border border-border text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted"
           >
-            Mis Créditos
-          </button>
-          <button
-            className={`py-3 font-semibold border-b-2 transition-colors ${
-              activeTab === "premium"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-            onClick={() => setActiveTab("premium")}
-          >
-            Premium
-          </button>
-          <button
-            className={`py-3 font-semibold border-b-2 transition-colors ${
-              activeTab === "my-publications"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-            onClick={() => setActiveTab("my-publications")}
-          >
-            Mis Publicaciones
-          </button>
-          <button
-            className={`py-3 font-semibold border-b-2 transition-colors ${
-              activeTab === "account"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-            onClick={() => setActiveTab("account")}
-          >
-            Mi Cuenta
-          </button>
+            Crear cuenta
+          </Link>
         </div>
       </div>
-
-      {/* Contenido principal: cambia según la tab */}
-      {activeTab === "marketplace" && (
-        <MarketplaceLayout
-          credits={filteredCredits}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          search={search}
-          onSearch={setSearch}
-          onSelectOffer={(offer) => {
-            setSelectedOffer(offer);
-            setIsModalOpen(true);
-          }}
-        />
-      )}
-
-      {activeTab === "my-credits" && <MyCreditsDashboard />}
-
-      {activeTab === "premium" && <PremiumPlans />}
-
-      {activeTab === "my-publications" && <SellerPublications />}
-
-      {activeTab === "account" && (
-        isLoggedIn ? (
-          <AccountProfile />
-        ) : (
-          <AccountAuth onLoginSuccess={() => setIsLoggedIn(true)} />
-        )
-      )}
-      <PublicationModal
-        offer={selectedOffer}
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </main>
   );
 }
